@@ -94,7 +94,7 @@ def aplicarRotas():
         vermapa1_button = canvas.create_window(260, 440, window=Button(text="Ver rota antes", width=15,command=lambda:verRotaNoMapa('mapa1'), bg='#579482', fg='white', font=('helvetica', 13, 'bold')))
         vermapa2_button = canvas.create_window(770, 440, window=Button(text="Ver rota depois", width=15,command=lambda:verRotaNoMapa('mapa2'), bg='#579482', fg='white', font=('helvetica', 13, 'bold')))
 
-
+ 
 def Waze_routing():
     start_address = endereco_inicio.get()
     end_address = endereco_fim.get()
