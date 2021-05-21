@@ -1,8 +1,5 @@
 # tsp_pcv_vrotas
 
-Nota para mim: https://gist.github.com/stephenhardy/5470814 (Steps to clear out the history of a git/github repository)
--para remover nome da empresa do código.
-
 Este programa oferece uma interface para a fácil resolução da otimização de trajetos, a partir do Problema do Caixeiro Viajante (Travelling Salesman Problem). Dados os endereços inicial e final, e um conjunto de endereços intermediários, o programa retorna a ordem ótima, curta e de baixa duração entre os endereços passados. Útil para economizar tempo e distância percorrida na locomoção urbana e otimizar custos de operações que utilizam deslocamento automotivo.
 
 O usuário deve rodar o osrm_backend em sua máquina para que o programa possa encontrar as distâncias ou durações mais curtas.
