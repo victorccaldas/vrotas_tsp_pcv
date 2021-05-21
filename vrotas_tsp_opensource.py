@@ -844,7 +844,6 @@ canvas.create_window(310, 180, window=endereco_fim)
 #horario_inicio.insert(END,str(datetime.strftime((datetime.now() + timedelta(days=1)), '%d/%m/%y %H:%M')))
 #canvas.create_window(700, 180, window=horario_inicio)
 
-
 # enderecos intermediarios
 ends_rota_label = Label(root_ends_routing, bg=cor_dos_labels,  text='Endereços intermediários (um por linha):', font=('helvetica', 13,'bold'))
 canvas.create_window(195, 215, window=ends_rota_label)
@@ -857,7 +856,7 @@ scrollbar_endclientes = Scrollbar(root_ends_routing, orient=HORIZONTAL, command=
 end_clientes.configure(xscrollcommand=scrollbar_endclientes.set)
 scrollbar_endclientes.place(x=30,y=400,width=350)
 end_clientes.place(x=30, y=235, width=350, height=170)
-end_clientes.insert(END,"Asa Sul, Brasília, DF\nGarvey, Brasília, DF\nSHIS Qi 23 conjunto 2 , Brasília, DF\nSHIS QL 12 conjunto 0, Brasília, DF\nSHIN qi 11 conjunto 7, Brasília, DF\nsqn 110 bloco K, Brasília, DF\nSQS 208 bloco H Asa Sul\nQNM 36 conjunto D, Taguatinga Norte\nQE 36 conjunto C, - GUARA II\nQE 15 conjunto K - GUARA II\nA.E 04 modulo B - GUARA II\nSHA conjunto 02 - ARNIQUEIRAS")
+end_clientes.insert(END,"Asa Sul, Brasília, DF\nAsa Norte, Brasilia, DF")
 
 # Botão "Otimizar Rota"
 canvas.create_window(460, 350, window=Label(root_ends_routing, text='→', font=('helvetica', 54))) # seta
