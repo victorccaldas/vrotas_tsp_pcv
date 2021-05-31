@@ -45,3 +45,5 @@ Como baixar no Windows:
 10. Agora o OSRM estará disponível no Docker. Sempre que quiser ativá-lo ou desativá-lo: abra o Dashboard do Docker, coloque o mouse em cima do OSRM e aperte no botão Start / Stop.
 
 11. Por fim, execute o arquivo Python aqui presente e utilize a ferramenta à vontade
+
+Se precisar de ajuda na configuração (em inglês) acesse https://hub.docker.com/r/osrm/osrm-backend/
