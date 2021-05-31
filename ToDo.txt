@@ -1,0 +1,2 @@
+1. Incluir Seletor de Arquivos pra escolher o browser utilizado:
+    https://www.geeksforgeeks.org/file-explorer-in-python-using-tkinter/
