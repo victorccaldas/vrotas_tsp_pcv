@@ -8,20 +8,70 @@ import googlemaps
 import requests
 import polyline
 import folium
+import psutil
+import time
 import sys
+import os
 
     
-chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-
+#chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+browser_path = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe %s'
 geolocator = Nominatim(user_agent="enderecos_routing")
 
 google_key = ''
 
 cor_dos_labels = 'white'
 
+# Iniciando container
+def iniciarDocker():
+    print("Verificando se docker está aberto...")
+    docker_parado = True
+    while docker_parado:
+        print('Tentando abrir o Docker..')
+        # start_osrm retorna 0 se tiver com docker aberto e conseguir ativar, ou se tiver com docker fechado.
+        # start_osrm retorna 1 se tiver com docker aberto e não conseguir ativar.
+
+        nome_processo = 'Docker Desktop.exe'
+        nome_container = 'osrm_container'
+
+        # Verificar se processo docker está aberto
+        if nome_processo in (p.name() for p in psutil.process_iter()):
+            # Se sim, iniciar osrm container
+            start_osrm = os.system('docker start '+nome_container)
+            if start_osrm == 0:
+                print("OSRM iniciado.")
+
+            elif start_osrm == 1:
+                # resetar DOCKER
+                for proc in psutil.process_iter():
+                    # check whether the process name matches
+                    if proc.name() == nome_processo:
+                        print("Deletando processo")
+                        proc.kill()
+        else:
+            os.startfile('C:\Program Files\Docker\Docker\Docker Desktop.exe')
+            print("Abrindo processo")
+            # Lançar start até abrir
+            start_osrm = os.system('docker start '+nome_container)
+            while start_osrm:
+                start_osrm = os.system('docker start '+nome_container)
+                time.sleep(1)
+
+        try: 
+            print("Tentando enviar request...")
+            requests.get('http://localhost:5000')
+            docker_parado = False
+            print("Request enviado com sucesso!")
+        except: 
+            print("não conseguiu Requestar localhost:5000.")
+            time.sleep(1)
+
+
 def aplicarRotas():
     global lista_enderecos
     global obs_google
+
+    iniciarDocker()
 
     lista_enderecos = end_clientes.get(1.0, END).split("\n")
     #lista_enderecos.remove
@@ -577,10 +627,10 @@ def G_routing():
     plotmap.draw('mapa2.html') # Trajeto otimizado, porém meio bugado
 
     # Removendo Markers A, B do mapa:
-    arquivo_mapa = open(os.path.dirname(__file__)+'/deps/mapa2.html').read()
+    arquivo_mapa = open(os.path.dirname(__file__)+'/img/mapa2.html').read()
     if 'suppress' not in arquivo_mapa:
         replaced = arquivo_mapa.replace('map: map', 'map: map, suppressMarkers: true')
-        writer = open(os.path.dirname(__file__)+'\deps\mapa2.html','w')
+        writer = open(os.path.dirname(__file__)+'\img\mapa2.html','w')
         writer.write(replaced)
         writer.close()
 
@@ -598,11 +648,11 @@ def G_routing():
 def verEnderecoNoMapa(tup_lat_lng, endereço):
     plotmap = folium.Map(location=tup_lat_lng, zoom_start=12)
     folium.Marker(location=tup_lat_lng, popup="Coordenada "+str(tup_lat_lng)+"\n\n"+str(endereço), tooltip=endereço).add_to(plotmap)
-    plotmap.save("map_verloc_individual_folium.html")
-    webbrowser.get(chrome_path).open(os.path.dirname(__file__)+"\map_verloc_individual_folium.html")
+    plotmap.save("mapas\map_verloc_individual_folium.html")
+    webbrowser.get(browser_path).open(os.path.dirname(__file__)+"\mapas\map_verloc_individual_folium.html")
 
 def verRotaNoMapa(mapanum):
-    webbrowser.get(chrome_path).open(os.path.dirname(__file__)+"\{}.html".format(mapanum)) 
+    webbrowser.get(browser_path).open(os.path.dirname(__file__)+"\mapas\{}.html".format(mapanum)) 
 
 def aplicarVerificacao(tupla_solicitada):
     global verif_result_label
@@ -700,7 +750,7 @@ def verificarEndereco_google():
         verif_result_label.config(bg='#d2e8ae', width=45, relief="solid")
         verif_result_label.delete(0,END)
         verif_result_label.insert(0, str('Local encontrado: '+str(verificar_coords)+' '))
-        vernomapa_button = canvas.create_window(555, 45, window=Button(text="Ver no mapa", width=15,command=lambda:verEnderecoNoMapa(), bg='#229399', fg='white', font=('helvetica', 12, 'bold')))
+        vernomapa_button = canvas.create_window(555, 45, window=Button(text="Ver no mapa", width=15,command=lambda:verEnderecoNoMapa(verificar_coords, verificacao), bg='#229399', fg='white', font=('helvetica', 12, 'bold')))
         
     except:
         verificar_lat = 0
@@ -782,12 +832,12 @@ canvas = Canvas(root_ends_routing, height = 500, width = 1000, bg = "white", rel
 canvas.pack()
 
 # Logo vRotas
-logo_vrotas = PhotoImage(file = os.path.dirname(__file__)+"\deps\logo vRotas 9.0 mini.png")
+logo_vrotas = PhotoImage(file = os.path.dirname(__file__)+"\img\logo vRotas 9.0 mini.png")
 logo_v_label = Label(root_ends_routing, image=logo_vrotas, bg='white')
 logo_v_label.place(x=850, y=-5)
 
 # Ícone
-root_ends_routing.iconphoto(True, PhotoImage(file=os.path.dirname(__file__)+'\deps\icone vRotas 9.0 mini.png'))
+root_ends_routing.iconphoto(True, PhotoImage(file=os.path.dirname(__file__)+'\img\icone vRotas 9.0 mini.png'))
 # faiô
 
 # checkboxes
